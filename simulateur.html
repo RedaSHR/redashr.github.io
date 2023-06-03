@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Calcul d'impôt</title>
+    <script>
+        function calculerImpot() {
+            var renteCapital = parseFloat(document.getElementById("renteCapital").value);
+
+            // Calcul de l'impôt en JavaScript
+            function revenusAnnuelToImpotPart(revenusAnnuel) {
+                if (revenusAnnuel <= 30000) {
+                    return 0;
+                } else if (30001 <= revenusAnnuel && revenusAnnuel <= 50000) {
+                    return 0.1 * revenusAnnuel - 3000;
+                } else if (50001 <= revenusAnnuel && revenusAnnuel <= 60000) {
+                    return 0.2 * revenusAnnuel - 8000;
+                } else if (60001 <= revenusAnnuel && revenusAnnuel <= 80000) {
+                    return 0.3 * revenusAnnuel - 14000;
+                } else if (80001 <= revenusAnnuel && revenusAnnuel <= 180000) {
+                    return 0.34 * revenusAnnuel - 17200;
+                } else {
+                    return 0.38 * revenusAnnuel - 24400;
+                }
+            }
+
+            function calculImpotRenteCapital(renteCapital) {
+                var montantPart = renteCapital / 4;
+
+                var montantAbattu = Math.min(montantPart, 168000);
+                var montantTaxable = montantPart - montantAbattu;
+
+                var impotsPart = 0;
+
+                if (montantAbattu > 0) {
+                    impotsPart += 0.7 * montantAbattu;
+                }
+                if (montantTaxable > 0) {
+                    impotsPart += 0.4 * montantTaxable;
+                }
+
+                var revenusAnnuelsTaxable = montantPart - impotsPart;
+
+                return revenusAnnuelToImpotPart(revenusAnnuelsTaxable) * 4;
+            }
+
+            var impot = calculImpotRenteCapital(renteCapital);
+            document.getElementById("resultat").innerHTML = "L'impôt à retenir à la source correspondant au montant global du capital servi est de : " + impot;
+        }
+    </script>
+</head>
+
+<body>
+    <h1>Calcul d'impôt</h1>
+    <label for="renteCapital">Montant de la rente servie en capital :</label>
+    <input type="text" id="renteCapital" name="renteCapital">
+    <button onclick="calculerImpot()">Calculer</button>
+    <p id="resultat"></p>
+</body>
+
+</html>
